@@ -1,0 +1,11 @@
+[package]
+name = "config"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[dependencies]
+# 配置文件读取以及用于消息序列化和反序列化处理
+serde_yaml = { workspace = true }
+serde = { workspace = true }

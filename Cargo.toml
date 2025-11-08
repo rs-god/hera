@@ -1,0 +1,19 @@
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["daheige"]
+description = "rust infras"
+
+[workspace]
+resolver = "3" # resolver为3表示在Rust 2021基础上进一步优化，改进特性解析和更严格的版本依赖检测
+members = [
+    "crates/config"
+]
+
+[workspace.dependencies]
+# serde yaml for config read
+serde_yaml = "0.9.33"
+
+# json序列化处理
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
