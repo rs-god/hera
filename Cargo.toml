@@ -7,7 +7,6 @@ keywords = ["infras", "rs-infras", "mysql", "redis", "pulsar"]
 readme = "README.md"
 license = "MIT"
 repository = "https://github.com/rs-god/hera"
-documentation = "https://docs.rs/hera/"
 
 [workspace]
 resolver = "3"
