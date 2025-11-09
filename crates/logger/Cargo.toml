@@ -1,0 +1,11 @@
+[package]
+name = "logger"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[dependencies]
+log = { workspace = true }
+env_logger = { workspace = true }
+chrono = { workspace = true }

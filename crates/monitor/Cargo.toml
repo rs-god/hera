@@ -1,0 +1,16 @@
+[package]
+name = "monitor"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[dependencies]
+# autometrics-rs for auto prometheus metrics sla
+autometrics = { workspace = true, features = ["prometheus-exporter"] }
+axum = { workspace = true }
+shutdown = { path = "../shutdown" }
+tokio = { workspace = true,features = ["full"] }
+serde = { workspace = true }
+log = { workspace = true }
+logger = { path = "../logger" }

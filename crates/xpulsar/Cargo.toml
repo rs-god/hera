@@ -1,0 +1,13 @@
+[package]
+name = "xpulsar"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[dependencies]
+pulsar = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+futures = { workspace = true }
+tokio = {workspace = true,features = ["full"]}
