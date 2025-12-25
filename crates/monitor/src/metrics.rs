@@ -1,8 +1,8 @@
-use shutdown::graceful_shutdown;
 use autometrics::objectives::{Objective, ObjectiveLatency, ObjectivePercentile};
 use autometrics::prometheus_exporter;
 use axum::Router;
 use axum::routing::get;
+use shutdown::graceful_shutdown;
 use std::net::SocketAddr;
 use std::time::Duration;
 use tokio::net::TcpListener;

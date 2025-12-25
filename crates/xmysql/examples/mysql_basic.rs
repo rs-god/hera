@@ -1,7 +1,7 @@
 use chrono::prelude::*;
 use futures::TryStreamExt;
-use xmysql::MysqlConf;
 use sqlx::Row;
+use xmysql::MysqlConf;
 
 #[derive(Debug, sqlx::FromRow)]
 struct Stu {

@@ -39,10 +39,10 @@ impl Logger {
                     buf,
                     "[{} {} {}:{}] {}",
                     Utc::now().format("%Y-%m-%dT%H:%M:%SZ"), // 时间格式
-                    level,                                    // 日志级别
+                    level,                                   // 日志级别
                     record.module_path().unwrap_or("unnamed"), // 模块名
-                    record.line().unwrap_or(0),               // 行号
-                    &record.args()                            // 日志message body内容
+                    record.line().unwrap_or(0),              // 行号
+                    &record.args()                           // 日志message body内容
                 )
             })
             .init();

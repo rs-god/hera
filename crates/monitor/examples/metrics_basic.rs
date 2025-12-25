@@ -7,8 +7,8 @@ use std::process;
 use std::time::Duration;
 // 引入axum相关包
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
-use shutdown::graceful_shutdown;
 use serde::{Deserialize, Serialize};
+use shutdown::graceful_shutdown;
 use tokio::net::TcpListener;
 
 // cargo run --example metrics_basic

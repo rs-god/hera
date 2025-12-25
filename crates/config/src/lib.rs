@@ -1,10 +1,10 @@
 use serde_yaml::{self, Value};
 use std::fs::File;
 use std::io::{Error, Read};
+use std::path::{Path, PathBuf};
 
 // ConfigTrait define config trait
 pub trait ConfigTrait {
-    fn new(path: &str) -> Self;
     fn load(&mut self) -> Result<(), Error>;
     fn sections(&self) -> Value;
     fn content(&self) -> &str;
@@ -12,21 +12,25 @@ pub trait ConfigTrait {
 
 // Config impl config trait
 pub struct Config {
-    config_file: String,
+    path: PathBuf,
     sections: String,
 }
 
-impl ConfigTrait for Config {
-    fn new(path: &str) -> Self {
+impl Config {
+    // 创建一个Config实例
+    pub fn new<P: AsRef<Path>>(path: P) -> Self {
+        let p = PathBuf::from(path.as_ref());
         let s = Config {
-            config_file: path.to_string(),
+            path: p,
             sections: String::new(),
         };
         s
     }
+}
 
+impl ConfigTrait for Config {
     fn load(&mut self) -> Result<(), Error> {
-        File::open(&self.config_file)
+        File::open(&self.path)
             .unwrap()
             .read_to_string(&mut self.sections)?;
         Ok(())
