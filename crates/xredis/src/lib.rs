@@ -147,12 +147,12 @@ mod tests {
     #[test]
     fn test_redis_cluster() {
         let nodes = vec![
+            "redis://:@127.0.0.1:6380/0",
             "redis://:@127.0.0.1:6381/0",
             "redis://:@127.0.0.1:6382/0",
             "redis://:@127.0.0.1:6383/0",
             "redis://:@127.0.0.1:6384/0",
             "redis://:@127.0.0.1:6385/0",
-            "redis://:@127.0.0.1:6386/0",
         ];
 
         let pool = RedisConf::builder()

@@ -1,3 +1,34 @@
+# redis example
+    支持单机版和集群版
+
+# redis cluster in docker
+```shell
+# 初始化redis 配置
+sh redis_cluster/init.sh
+
+# 启动redis 实例
+sh redis_cluster/docker-cluster-start.sh
+```
+
+当redis实例都启动后，执行 redis cluster create操作
+```shell
+sh redis_cluster/docker-cluster-create.sh
+```
+输出结果如下：
+```ini
+[OK] All nodes agree about slots configuration.
+>>> Check for open slots...
+>>> Check slots coverage...
+[OK] All 16384 slots covered.
+```
+或者直接执行如下命令启动redis cluster
+```shell
+sh redis_cluster/docker-run.sh
+```
+
+# rust redis cluster
+运行示例如下：
+```rust
 use redis::Commands;
 use redis::RedisResult;
 use xredis::RedisConf;
@@ -68,3 +99,4 @@ fn test_redis_cluster() {
     let res : RedisResult<String> = conn.get("my_user");
     println!("res: {:?}", res);
 }
+```
