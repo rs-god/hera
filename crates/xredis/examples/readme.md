@@ -25,6 +25,22 @@ sh redis_cluster/docker-cluster-create.sh
 ```shell
 sh redis_cluster/docker-run.sh
 ```
+
+## Verify the Redis cluster
+进入容器验证redis cluster
+```shell
+docker exec -it redis-6381 bash
+```
+接着执行如下命令，进入redis操作命令终端
+```shell
+redis-cli -p 6381
+#127.0.0.1:6381> set abc 1
+#OK
+#127.0.0.1:6381> get abc
+#"1"
+#127.0.0.1:6381>
+```
+
 如果本地安装了redis客户端，可以通过以下命令验证集群
 ```shell
 redis-cli -h 127.0.0.1 -p 6381
