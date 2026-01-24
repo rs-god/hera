@@ -14,3 +14,4 @@ tokio = { workspace = true,features = ["full"] }
 serde = { workspace = true }
 log = { workspace = true }
 logger = { path = "../logger" }
+chrono = { workspace = true }

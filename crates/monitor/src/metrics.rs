@@ -1,7 +1,11 @@
 use autometrics::objectives::{Objective, ObjectiveLatency, ObjectivePercentile};
 use autometrics::prometheus_exporter;
-use axum::Router;
+use axum::http::StatusCode;
+use axum::response::IntoResponse;
 use axum::routing::get;
+use axum::{Json, Router};
+use chrono::Utc;
+use serde::{Deserialize, Serialize};
 use shutdown::graceful_shutdown;
 use std::net::SocketAddr;
 use std::time::Duration;
@@ -24,10 +28,12 @@ pub async fn prometheus_init(port: u16) {
     prometheus_exporter::init();
 
     // Build http /metrics endpoint
-    let router = Router::new().route(
-        "/metrics",
-        get(|| async { prometheus_exporter::encode_http_response() }),
-    );
+    let router = Router::new()
+        .route(
+            "/metrics",
+            get(|| async { prometheus_exporter::encode_http_response() }),
+        )
+        .route("/check", get(check));
 
     let address: SocketAddr = format!("0.0.0.0:{}", port).parse().unwrap();
     let listener = TcpListener::bind(address).await.unwrap();
@@ -38,4 +44,24 @@ pub async fn prometheus_init(port: u16) {
         .with_graceful_shutdown(graceful_shutdown(Duration::from_secs(5)))
         .await
         .expect("prometheus metrics init failed");
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct CheckReply<T> {
+    pub code: i32,
+    pub message: String,
+    pub data: Option<T>,
+}
+
+pub async fn check() -> impl IntoResponse {
+    let now = Utc::now().format("%Y-%m-%d %H:%M:%S");
+
+    (
+        StatusCode::OK,
+        Json(CheckReply {
+            code: 0,
+            message: "ok".to_string(),
+            data: Some(now.to_string()),
+        }),
+    )
 }
