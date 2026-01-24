@@ -65,6 +65,6 @@ fn test_redis_cluster() {
         println!("set success");
     }
 
-    let res : RedisResult<String> = conn.get("my_user");
+    let res: RedisResult<String> = conn.get("my_user");
     println!("res: {:?}", res);
 }

@@ -1,3 +1,7 @@
 app_debug: true
 app_name: test
-app_port: 1336
+#app_port: 1336
+# 时间格式
+graceful_wait_time:
+  secs: 10
+  nanos: 0
