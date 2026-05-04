@@ -1,10 +1,8 @@
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use cbc::cipher::block_padding::Pkcs7;
-use cbc::cipher::{
-    BlockCipher, BlockDecrypt, BlockDecryptMut, BlockEncrypt, BlockEncryptMut, KeyInit, KeyIvInit,
-};
+use cbc::cipher::{BlockCipherDecrypt, BlockCipherEncrypt, BlockModeDecrypt, BlockModeEncrypt, KeyInit, KeyIvInit};
 use cbc::{Decryptor, Encryptor};
-use rand::Rng;
+use rand::RngExt;
 
 const HEX_CHARS: &[u8] = b"0123456789abcdefABCDEF";
 
@@ -28,7 +26,7 @@ fn generate_random_hex_string(length: usize) -> String {
 
 impl<T> AesCrypto<T>
 where
-    T: BlockCipher + BlockDecrypt + BlockEncrypt + KeyInit,
+    T: BlockCipherEncrypt + BlockCipherDecrypt + KeyInit,
 {
     pub fn new(key: &str, iv: &str) -> Self {
         Self {
@@ -47,7 +45,7 @@ where
         buffer[..data.len()].copy_from_slice(data);
 
         let ciphertext = cipher
-            .encrypt_padded_mut::<Pkcs7>(&mut buffer, data.len())
+            .encrypt_padded::<Pkcs7>(&mut buffer, data.len())
             .map_err(|e| format!("failed to encrypt error: {}", e))?;
 
         Ok(STANDARD.encode(ciphertext.to_vec()))
@@ -62,7 +60,7 @@ where
 
         let mut buffer = ciphertext.to_vec();
         let plaintext = cipher
-            .decrypt_padded_mut::<Pkcs7>(&mut buffer)
+            .decrypt_padded::<Pkcs7>(&mut buffer)
             .map_err(|e| format!("failed to decrypt error: {}", e))?;
 
         let s = String::from_utf8(plaintext.to_vec())
