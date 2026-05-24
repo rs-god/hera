@@ -612,7 +612,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "serde",
  "serde_yaml",
@@ -720,7 +720,7 @@ checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
 
 [[package]]
 name = "crypto"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "aes",
  "base64 0.22.1",
@@ -1897,7 +1897,7 @@ dependencies = [
 
 [[package]]
 name = "logger"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2027,7 +2027,7 @@ dependencies = [
 
 [[package]]
 name = "monitor"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "autometrics",
  "axum",
@@ -3350,7 +3350,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "shutdown"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "tokio",
 ]
@@ -4565,7 +4565,7 @@ checksum = "1ffae5123b2d3fc086436f8834ae3ab053a283cfac8fe0a0b8eaae044768a4c4"
 
 [[package]]
 name = "xmysql"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "chrono",
  "futures",
@@ -4575,7 +4575,7 @@ dependencies = [
 
 [[package]]
 name = "xpulsar"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "futures",
  "pulsar",
@@ -4586,7 +4586,7 @@ dependencies = [
 
 [[package]]
 name = "xredis"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "r2d2",
  "redis",

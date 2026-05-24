@@ -11,7 +11,7 @@ MySQL/Redis/Pulsar 等中间件封装。
 
 | 项目 | 值                                |
 |----|----------------------------------|
-| 版本 | v1.2.0                           |
+| 版本 | v1.2.1                           |
 | 仓库 | <https://github.com/rs-god/hera> |
 | 协议 | MIT                              |
 | 作者 | daheige                          |
@@ -36,14 +36,14 @@ MySQL/Redis/Pulsar 等中间件封装。
 
 ```toml
 [dependencies]
-crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
-xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
+crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
 ```
 
 ---
