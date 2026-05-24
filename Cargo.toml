@@ -30,7 +30,7 @@ serde_json = "1.0.149"
 
 # crypto
 aes = "0.9.0"
-cbc = "0.2.0"
+cbc = "0.2.1"
 rand = "0.10.1"
 base64 = "0.22.1"
 
@@ -43,8 +43,8 @@ chrono = "0.4.44"
 autometrics = { version = "3.0.0", features = ["prometheus-exporter"] }
 axum = "0.8.9"
 
-tokio = { version = "1.52.1", features = ["full"] }
-sqlx = { version = "0.8.6", features = ["runtime-tokio", "mysql", "chrono", "time"] }
+tokio = { version = "1.52.3", features = ["full"] }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "mysql", "chrono", "time"] }
 futures = "0.3.32"
 
 # redis use tokio async

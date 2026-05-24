@@ -1,18 +1,20 @@
 # hera 组件库使用指南
+
 Rust infrastructure component library
 
-`hera` 是一个 Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管理、加解密、日志、监控、平滑退出以及 MySQL/Redis/Pulsar 等中间件封装。
+`hera` 是一个 Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管理、加解密、日志、监控、平滑退出以及
+MySQL/Redis/Pulsar 等中间件封装。
 
 ---
 
 ## 版本信息
 
-| 项目 | 值 |
-|------|-----|
-| 版本 | v1.2.0 |
+| 项目 | 值                                |
+|----|----------------------------------|
+| 版本 | v1.2.0                           |
 | 仓库 | <https://github.com/rs-god/hera> |
-| 协议 | MIT |
-| 作者 | daheige |
+| 协议 | MIT                              |
+| 作者 | daheige                          |
 
 ## 目录
 
@@ -49,6 +51,7 @@ xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.0" }
 ## config — YAML 配置读取
 
 **功能点**
+
 - 读取 YAML 配置文件内容
 - 支持反序列化为 `serde_yaml::Value` 或自定义结构体
 - 基于 `ConfigTrait`  trait 抽象
@@ -82,12 +85,14 @@ let cfg: AppConfig = serde_yaml::from_value(val).unwrap();
 ## crypto — AES 加解密
 
 **功能点**
+
 - 支持 AES-128、AES-192、AES-256 三种密钥长度
 - CBC 模式 + PKCS7 填充
 - 加密结果采用 Base64 编码
 - 内置随机 key/iv 生成方法（16 进制字符串）
 
 **核心类型**
+
 - `Aes128Crypto` — 16 字节密钥
 - `Aes192Crypto` — 24 字节密钥
 - `Aes256Crypto` — 32 字节密钥
@@ -100,11 +105,11 @@ use crypto::Aes256Crypto;
 
 let key = Aes256Crypto::generate_key(); // 32 位 16 进制字符串
 let iv = Aes256Crypto::generate_iv();   // 16 位 16 进制字符串
-let c = Aes256Crypto::new(&key, &iv);
+let c = Aes256Crypto::new( & key, & iv);
 
 let s = "hello world";
 let encrypted = c.encrypt(s).unwrap();   // Base64 密文
-let decrypted = c.decrypt(&encrypted).unwrap();
+let decrypted = c.decrypt( & encrypted).unwrap();
 assert_eq!(s, decrypted);
 ```
 
@@ -113,6 +118,7 @@ assert_eq!(s, decrypted);
 ## logger — 日志初始化
 
 **功能点**
+
 - 基于 `env_logger` 封装
 - 支持标准输出（Stdout）
 - 可选 `caller_line` 模式：日志中携带模块路径与代码行号
@@ -139,6 +145,7 @@ Logger::new().with_caller_line().init();
 ## monitor — Prometheus 监控指标
 
 **功能点**
+
 - 基于 `autometrics` 自动采集函数级指标（调用次数、延迟、成功率）
 - 内置 SLO（Service Level Objective）定义：成功率 P99.9、延迟 P99 < 1000ms
 - 提供 `/metrics` Prometheus 拉取端点
@@ -146,6 +153,7 @@ Logger::new().with_caller_line().init();
 - 集成 `axum` HTTP 服务与平滑退出
 
 **核心 API**
+
 - `prometheus_init(port)` — 启动独立 metrics HTTP 服务
 - `API_SLO` — 预定义 SLO 常量，配合 `#[autometrics(objective = API_SLO)]` 使用
 
@@ -174,6 +182,7 @@ pub async fn home() -> &'static str {
 ## shutdown — 平滑退出
 
 **功能点**
+
 - 监听系统退出信号（Ctrl+C / SIGTERM）
 - 信号触发后等待指定时长再退出，便于执行清理逻辑
 - 跨平台兼容（Unix/Windows）
@@ -197,9 +206,9 @@ async fn main() {
 
 ```rust
 axum::serve(listener, router)
-    .with_graceful_shutdown(graceful_shutdown(Duration::from_secs(5)))
-    .await
-    .unwrap();
+.with_graceful_shutdown(graceful_shutdown(Duration::from_secs(5)))
+.await
+.unwrap();
 ```
 
 ---
@@ -207,11 +216,13 @@ axum::serve(listener, router)
 ## xmysql — MySQL 连接池
 
 **功能点**
+
 - 基于 `sqlx` 的异步 MySQL 连接池
 - 可配置最大/最小连接数、最大生命周期、空闲超时、连接超时
 - 返回 `sqlx::MySqlPool`，可直接用于 `sqlx` 查询 API
 
 **配置项（默认值）**
+
 - `max_connections`: 100
 - `min_connections`: 10
 - `max_lifetime`: 1800s
@@ -225,16 +236,16 @@ use xmysql::MysqlConf;
 
 let dsn = "mysql://root:root123456@localhost/test";
 let pool = MysqlConf::new(dsn)
-    .with_max_connections(10)
-    .init_pool()
-    .await
-    .unwrap();
+.with_max_connections(10)
+.init_pool()
+.await
+.unwrap();
 
 // 使用 sqlx API 查询
 let row: (i64,) = sqlx::query_as("select ?")
-    .bind(120i64)
-    .fetch_one(&pool)
-    .await?;
+.bind(120i64)
+.fetch_one( & pool)
+.await?;
 ```
 
 ---
@@ -242,6 +253,7 @@ let row: (i64,) = sqlx::query_as("select ?")
 ## xpulsar — Pulsar 消息队列
 
 **功能点**
+
 - 基于 `pulsar` crate 的异步客户端封装
 - 支持 Token 认证
 - 提供 Producer / Consumer Builder 快捷创建
@@ -254,30 +266,30 @@ use xpulsar::{PulsarConf, Message};
 use pulsar::{producer, proto};
 
 let conf = PulsarConf::new("pulsar://127.0.0.1:6650")
-    .with_token("your-token"); // 可选
+.with_token("your-token"); // 可选
 
 let builder = conf.pulsar_builder();
 let pulsar_obj = conf.pulsar_obj(builder).await.unwrap();
 
 // 创建生产者
 let mut producer = pulsar_obj
-    .producer()
-    .with_topic("my-topic")
-    .with_name("my_producer")
-    .build()
-    .await?;
+.producer()
+.with_topic("my-topic")
+.with_name("my_producer")
+.build()
+.await?;
 
 producer.send_non_blocking(Message { data: "hello".into() }).await?;
 
 // 创建消费者
 let mut consumer = pulsar_obj
-    .consumer()
-    .with_topic("my-topic")
-    .with_consumer_name("group-1")
-    .with_subscription_type(SubType::Exclusive)
-    .with_subscription("my_sub")
-    .build()
-    .await?;
+.consumer()
+.with_topic("my-topic")
+.with_consumer_name("group-1")
+.with_subscription_type(SubType::Exclusive)
+.with_subscription("my_sub")
+.build()
+.await?;
 ```
 
 ---
@@ -285,12 +297,14 @@ let mut consumer = pulsar_obj
 ## xredis — Redis 客户端/集群
 
 **功能点**
+
 - 支持单节点 Redis（`redis::Client`）和 Redis Cluster（`ClusterClient`）
 - 基于 `r2d2` 的连接池管理
 - 支持同步与异步操作
 - Builder 风格配置
 
 **配置项（默认值）**
+
 - `max_size`: 20
 - `min_idle`: 3
 - `max_lifetime`: 1800s
@@ -306,8 +320,8 @@ use redis::Commands;
 // 单节点 + 连接池
 let dsn = "redis://:@127.0.0.1:6379/0";
 let pool = RedisConf::builder()
-    .with_dsn(dsn)
-    .init_pool();
+.with_dsn(dsn)
+.init_pool();
 
 let mut conn = pool.get().unwrap();
 let _: () = conn.set("my_user", "daheige").unwrap();
@@ -319,12 +333,12 @@ let nodes = vec![
     // ...
 ];
 let pool = RedisConf::builder()
-    .with_cluster_nodes(nodes)
-    .init_cluster_pool();
+.with_cluster_nodes(nodes)
+.init_cluster_pool();
 
 // 异步操作
 use redis::AsyncCommands;
-let client = RedisConf::builder().with_dsn(dsn).client()?;
+let client = RedisConf::builder().with_dsn(dsn).client() ?;
 let mut con = client.get_multiplexed_async_connection().await?;
 let _: () = con.set("name", "hello").await?;
 let name: String = con.get("name").await?;
