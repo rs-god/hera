@@ -1,5 +1,5 @@
 [workspace.package]
-version = "1.2.1"
+version = "1.2.2"
 edition = "2024"
 authors = ["daheige"]
 description = "rust infras"
@@ -26,30 +26,30 @@ members = [
 # serde
 serde_yaml = "0.9.33"
 serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.149"
+serde_json = "1.0.150"
 
 # crypto
-aes = "0.9.0"
+aes = "0.9.1"
 cbc = "0.2.1"
-rand = "0.10.1"
+rand = "0.10.2"
 base64 = "0.22.1"
 
 # logger
-log = "0.4.29"
-env_logger = { version = "0.11.10", features = ["color"] }
-chrono = "0.4.44"
+log = { version = "0.4.33", features = ["kv"] }
+env_logger = { version = "0.11.11", features = ["color"] }
+chrono = "0.4.45"
 
 # autometrics-rs for auto prometheus metrics sla
 autometrics = { version = "3.0.0", features = ["prometheus-exporter"] }
 axum = "0.8.9"
 
-tokio = { version = "1.52.3", features = ["full"] }
+tokio = { version = "1.53.0", features = ["full"] }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "mysql", "chrono", "time"] }
 futures = "0.3.32"
 
 # redis use tokio async
-redis = { version = "1.2.1", features = ["r2d2", "tokio-comp", "cluster", "cluster-async", "json"] }
+redis = { version = "1.4.1", features = ["r2d2", "tokio-comp", "cluster", "cluster-async", "json"] }
 r2d2 = "0.8.10"
 
 # pulsar
-pulsar = "6.7.2"
+pulsar = "6.8.0"

@@ -10,9 +10,9 @@ checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
 
 [[package]]
 name = "aes"
-version = "0.9.0"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66bd29a732b644c0431c6140f370d097879203d79b80c94a6747ba0872adaef8"
+checksum = "f1fc76eaeac4c9164506c466d4ffdd8ec9d0c5bf57ee97177c4d8eceb3a0e138"
 dependencies = [
  "cipher",
  "cpubits",
@@ -553,9 +553,9 @@ dependencies = [
 
 [[package]]
 name = "chrono"
-version = "0.4.44"
+version = "0.4.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c673075a2e0e5f4a1dde27ce9dee1ea4558c7ffe648f576438a20ca1d2acc4b0"
+checksum = "1aa79e62e7697b8e29b513a68abacf485adcd1fe8284a4316c5ae868e6633327"
 dependencies = [
  "iana-time-zone",
  "js-sys",
@@ -612,7 +612,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "serde",
  "serde_yaml",
@@ -720,12 +720,12 @@ checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
 
 [[package]]
 name = "crypto"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "aes",
  "base64 0.22.1",
  "cbc",
- "rand 0.10.1",
+ "rand 0.10.2",
 ]
 
 [[package]]
@@ -978,9 +978,9 @@ dependencies = [
 
 [[package]]
 name = "env_filter"
-version = "1.0.1"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32e90c2accc4b07a8456ea0debdc2e7587bdd890680d71173a15d4ae604f6eef"
+checksum = "900d271a03799a1ee8d1ca9b19893b48ca674a9284fefcfb85f05e74ed314217"
 dependencies = [
  "log",
  "regex",
@@ -988,9 +988,9 @@ dependencies = [
 
 [[package]]
 name = "env_logger"
-version = "0.11.10"
+version = "0.11.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0621c04f2196ac3f488dd583365b9c09be011a4ab8b9f37248ffcc8f6198b56a"
+checksum = "de671bd27a75a797dc9ae289ba1e77276e75e2026408aab65185384e2d5cd3f6"
 dependencies = [
  "anstream",
  "anstyle",
@@ -1888,20 +1888,22 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.29"
+version = "0.4.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
+checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 dependencies = [
  "value-bag",
 ]
 
 [[package]]
 name = "logger"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "chrono",
  "env_logger",
  "log",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -2027,7 +2029,7 @@ dependencies = [
 
 [[package]]
 name = "monitor"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "autometrics",
  "axum",
@@ -2592,9 +2594,9 @@ dependencies = [
 
 [[package]]
 name = "pulsar"
-version = "6.7.2"
+version = "6.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2367cb38f1b65857bc11dd13b2adf13b7a1d991ef1cd43572f1420958c56cc2"
+checksum = "a2784d3ed4cc69abf1257842f40b5ca89cfa2e6047912a9691193532c211ab13"
 dependencies = [
  "async-channel 2.5.0",
  "async-native-tls",
@@ -2756,9 +2758,9 @@ dependencies = [
 
 [[package]]
 name = "rand"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2e8e8bcc7961af1fdac401278c6a831614941f6164ee3bf4ce61b7edb162207"
+checksum = "c7f5fa3a058cd35567ef9bfa5e75732bee0f9e4c55fa90477bef2dfcdbc4be80"
 dependencies = [
  "chacha20",
  "getrandom 0.4.2",
@@ -2838,9 +2840,9 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "1.2.1"
+version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72d32a1ac9123f0d84fda64bfc02a271d9868483162dd2d9099b5c362ece064c"
+checksum = "b0b9503711b03773e43b31668c7b5bd279ee7cd9b7d18cff7c23a42cc1d08e5a"
 dependencies = [
  "arcstr",
  "async-lock",
@@ -2855,7 +2857,7 @@ dependencies = [
  "percent-encoding",
  "pin-project-lite",
  "r2d2",
- "rand 0.9.4",
+ "rand 0.10.2",
  "ryu",
  "serde",
  "serde_json",
@@ -3350,7 +3352,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "shutdown"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "tokio",
 ]
@@ -3588,7 +3590,7 @@ dependencies = [
  "log",
  "md-5",
  "memchr",
- "rand 0.10.1",
+ "rand 0.10.2",
  "serde",
  "serde_json",
  "sha2 0.11.0",
@@ -3809,9 +3811,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.52.3"
+version = "1.53.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fc7f01b389ac15039e4dc9531aa973a135d7a4135281b12d7c1bc79fd57fffe"
+checksum = "d988bcd52dbe076d3d46903332f58c912b87a2c49b1428419a5845154762ffee"
 dependencies = [
  "bytes",
  "libc",
@@ -4047,7 +4049,7 @@ checksum = "ddd74a9687298c6858e9b88ec8935ec45d22e8fd5e6394fa1bd4e99a87789c76"
 dependencies = [
  "getrandom 0.4.2",
  "js-sys",
- "rand 0.10.1",
+ "rand 0.10.2",
  "wasm-bindgen",
 ]
 
@@ -4565,7 +4567,7 @@ checksum = "1ffae5123b2d3fc086436f8834ae3ab053a283cfac8fe0a0b8eaae044768a4c4"
 
 [[package]]
 name = "xmysql"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "chrono",
  "futures",
@@ -4575,7 +4577,7 @@ dependencies = [
 
 [[package]]
 name = "xpulsar"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "futures",
  "pulsar",
@@ -4586,7 +4588,7 @@ dependencies = [
 
 [[package]]
 name = "xredis"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "r2d2",
  "redis",

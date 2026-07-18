@@ -1,20 +1,34 @@
-# hera 组件库使用指南
+# hera
 
-Rust infrastructure component library
+[![Rust](https://img.shields.io/badge/rust-1.85%2B-orange.svg)](https://www.rust-lang.org)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Tag](https://img.shields.io/badge/tag-v1.2.2-blue.svg)](https://github.com/rs-god/hera/releases/tag/v1.2.2)
 
-`hera` 是一个 Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管理、加解密、日志、监控、平滑退出以及
-MySQL/Redis/Pulsar 等中间件封装。
-
----
+Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管理、加解密、日志、监控、平滑退出以及 MySQL/Redis/Pulsar 等中间件封装。
 
 ## 版本信息
 
-| 项目 | 值                                |
-|----|----------------------------------|
-| 版本 | v1.2.1                           |
+| 项目 | 值 |
+|---|---|
+| 版本 | v1.2.2 |
 | 仓库 | <https://github.com/rs-god/hera> |
-| 协议 | MIT                              |
-| 作者 | daheige                          |
+| 协议 | MIT |
+| 作者 | daheige |
+
+## 特性概览
+
+| 组件 | 定位 | 核心能力 |
+|---|---|---|
+| `config` | 配置读取 | YAML 配置文件加载与反序列化 |
+| `crypto` | 加解密 | AES-128/192/256 CBC 模式加密，Base64 输出 |
+| `logger` | 日志 | 普通文本 / JSON 输出，支持 `log` key/value，可自定义时间格式 |
+| `monitor` | 监控 | 基于 `autometrics` 自动采集函数级 Prometheus 指标 |
+| `shutdown` | 平滑退出 | 监听系统信号，支持异步优雅关闭 |
+| `xmysql` | MySQL | 基于 `sqlx` 的异步连接池 |
+| `xredis` | Redis | 单节点 / 集群连接池，支持同步与异步 |
+| `xpulsar` | Pulsar | 异步 Producer/Consumer 封装，支持 Token 认证 |
+
+---
 
 ## 目录
 
@@ -36,14 +50,60 @@ MySQL/Redis/Pulsar 等中间件封装。
 
 ```toml
 [dependencies]
-crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
-xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
+crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+```
+
+> 如需使用 `logger` 的 key/value 语法，请同时依赖 `log = { version = "0.4", features = ["kv"] }`。
+
+---
+
+## 环境要求
+
+- **Rust**: 1.85 或更高版本
+- **Edition**: 2024
+- 部分组件需要额外运行环境：
+  - `xmysql`：MySQL 服务
+  - `xredis`：Redis 单节点或集群
+  - `xpulsar`：Pulsar 服务
+  - `monitor`：可选 Prometheus 拉取端点
+
+---
+
+## 快速开始
+
+下面以 `logger` 为例，演示如何在业务项目中使用 hera 组件：
+
+```rust
+use log::info;
+use logger::Logger;
+
+fn main() {
+    Logger::new()
+        .with_caller_line()
+        .with_json()
+        .init();
+
+    info!(a = 1, b = "xxx"; "hello,world");
+}
+```
+
+运行：
+
+```bash
+RUST_LOG=info cargo run
+```
+
+输出：
+
+```json
+{"ts":"2026-07-18T14:25:16Z","level":"INFO","module":"my_app::main","caller":7,"msg":"hello,world","a":1,"b":"xxx"}
 ```
 
 ---
@@ -54,7 +114,7 @@ xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.1" }
 
 - 读取 YAML 配置文件内容
 - 支持反序列化为 `serde_yaml::Value` 或自定义结构体
-- 基于 `ConfigTrait`  trait 抽象
+- 基于 `ConfigTrait` trait 抽象
 
 **使用示例**
 
@@ -105,11 +165,11 @@ use crypto::Aes256Crypto;
 
 let key = Aes256Crypto::generate_key(); // 32 位 16 进制字符串
 let iv = Aes256Crypto::generate_iv();   // 16 位 16 进制字符串
-let c = Aes256Crypto::new( & key, & iv);
+let c = Aes256Crypto::new(&key, &iv);
 
 let s = "hello world";
 let encrypted = c.encrypt(s).unwrap();   // Base64 密文
-let decrypted = c.decrypt( & encrypted).unwrap();
+let decrypted = c.decrypt(&encrypted).unwrap();
 assert_eq!(s, decrypted);
 ```
 
@@ -119,25 +179,58 @@ assert_eq!(s, decrypted);
 
 **功能点**
 
-- 基于 `env_logger` 封装
+- 基于 `env_logger` 与 crates.io `log` crate 封装
 - 支持标准输出（Stdout）
+- 普通文本格式与 JSON 结构化格式可选
+- 完整支持 `log` 原生 key/value 语法：`info!(key = value; "msg")`
 - 可选 `caller_line` 模式：日志中携带模块路径与代码行号
+- 可选 `with_json()` 模式：输出 JSON 格式日志
+- 可选 `with_time_format()` 自定义时间格式，默认 `%Y-%m-%dT%H:%M:%SZ`
+- 自定义 `target:` 标签可自动输出到 JSON
 - 日志级别通过环境变量 `RUST_LOG` 控制，优先级：`error > warn > info > debug > trace`
 
 **使用示例**
 
 ```rust
+use log::info;
 use logger::Logger;
 
-// 标准模式
-Logger::new().init();
+// JSON 格式，携带 caller 行号
+Logger::new()
+    .with_caller_line()
+    .with_json()
+    .init();
 
-// 带行号模式，输出示例：
-// [2025-11-09T01:19:41Z INFO logger::tests:77] info message
+info!(a = 1, b = "xxx"; "hello,world");
+```
+
+输出：
+
+```json
+{"ts":"2026-07-18T14:25:16Z","level":"INFO","module":"my_app::main","caller":7,"msg":"hello,world","a":1,"b":"xxx"}
+```
+
+自定义时间格式：
+
+```rust
+Logger::new()
+    .with_json()
+    .with_time_format("%Y-%m-%d %H:%M:%S")
+    .init();
+```
+
+普通文本格式（带行号）：
+
+```rust
 Logger::new().with_caller_line().init();
+info!("hello,world");
+// [2026-07-18T14:25:16Z INFO my_app::main:7] hello,world
+```
 
-// 配合环境变量使用
-// RUST_LOG=info cargo run
+配合环境变量使用：
+
+```bash
+RUST_LOG=info cargo run
 ```
 
 ---
@@ -243,9 +336,9 @@ let pool = MysqlConf::new(dsn)
 
 // 使用 sqlx API 查询
 let row: (i64,) = sqlx::query_as("select ?")
-.bind(120i64)
-.fetch_one( & pool)
-.await?;
+    .bind(120i64)
+    .fetch_one(&pool)
+    .await?;
 ```
 
 ---
@@ -338,10 +431,29 @@ let pool = RedisConf::builder()
 
 // 异步操作
 use redis::AsyncCommands;
-let client = RedisConf::builder().with_dsn(dsn).client() ?;
+let client = RedisConf::builder().with_dsn(dsn).client()?;
 let mut con = client.get_multiplexed_async_connection().await?;
 let _: () = con.set("name", "hello").await?;
 let name: String = con.get("name").await?;
 ```
 
 ---
+
+## 各 Crate 详细文档
+
+每个 crate 的源码目录下都有独立的 `readme.md`，包含更详细的 API 说明与示例：
+
+- [config](crates/config/readme.md) — YAML 配置读取
+- [crypto](crates/crypto/readme.md) — AES 加解密
+- [logger](crates/logger/readme.md) — 日志初始化（JSON / 普通文本）
+- [monitor](crates/monitor/readme.md) — Prometheus 监控指标
+- [shutdown](crates/shutdown/readme.md) — 平滑退出
+- [xmysql](crates/xmysql/readme.md) — MySQL 连接池
+- [xpulsar](crates/xpulsar/readme.md) — Pulsar 消息队列
+- [xredis](crates/xredis/readme.md) — Redis 客户端/集群
+
+---
+
+## 许可证
+
+本项目采用 [MIT](LICENSE) 协议开源。
