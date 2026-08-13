@@ -2,7 +2,7 @@
 
 [![Rust](https://img.shields.io/badge/rust-1.85%2B-orange.svg)](https://www.rust-lang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Tag](https://img.shields.io/badge/tag-v1.2.3-blue.svg)](https://github.com/rs-god/hera/releases/tag/v1.2.3)
+[![Tag](https://img.shields.io/badge/tag-v1.2.4-blue.svg)](https://github.com/rs-god/hera/releases/tag/v1.2.4)
 
 Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管理、加解密、日志、监控、平滑退出以及 MySQL/Redis/Pulsar 等中间件封装。
 
@@ -10,7 +10,7 @@ Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管
 
 | 项目 | 值 |
 |---|---|
-| 版本 | v1.2.3 |
+| 版本 | v1.2.4 |
 | 仓库 | <https://github.com/rs-god/hera> |
 | 协议 | MIT |
 | 作者 | daheige |
@@ -50,14 +50,14 @@ Rust 基础设施组件库，采用 Workspace 多 Crate 架构，提供配置管
 
 ```toml
 [dependencies]
-crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
-xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.3" }
+crypto = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+monitor = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+shutdown = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+config = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+xmysql = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+xredis = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
+xpulsar = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.4" }
 ```
 
 > 如需使用 `logger` 的 key/value 语法，请同时依赖 `log = { version = "0.4", features = ["kv"] }`。
