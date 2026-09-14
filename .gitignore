@@ -27,3 +27,4 @@ target
 crates/*/.git
 .idea
 .claude
+Cargo.lock
