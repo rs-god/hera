@@ -14,6 +14,7 @@
 - **caller 行号**：通过 `with_caller_line()` 在普通格式或 JSON 中携带调用行号。
 - **自定义 target**：`target: "xxx"` 自定义日志分类标签，自定义 target 会自动输出到 JSON。
 - **可配置时间格式**：默认 ISO 8601（`%Y-%m-%dT%H:%M:%SZ`），可通过 `with_time_format()` 自定义。
+- **本地时间输出**：通过 `with_local_time()` 切换到本地时间（`chrono::Local`），默认使用 UTC 时间（`chrono::Utc`）。
 - **通过 `RUST_LOG` 控制日志级别**：如 `RUST_LOG=info`、`RUST_LOG=my_target=debug`。
 
 ---
@@ -48,7 +49,7 @@ flowchart TD
 ```toml
 [dependencies]
 log = { version = "0.4", features = ["kv"] }
-logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.2.2" }
+logger = { git = "https://github.com/rs-god/hera.git", tag = "v1.3.0" }
 ```
 
 > `log` 必须启用 `kv` feature，否则 `info!(key = value; "msg")` 语法无法编译。
@@ -100,6 +101,7 @@ let logger = Logger::new();
 | `with_caller_line()` | 输出中携带调用行号 | `false` |
 | `with_json()` | 以 JSON 格式输出 | `false` |
 | `with_time_format(fmt)` | 自定义时间格式 | `%Y-%m-%dT%H:%M:%SZ` |
+| `with_local_time()` | 使用本地时间输出（默认 UTC 时间） | `false` |
 
 ```rust
 Logger::new()
@@ -163,6 +165,28 @@ info!("hello,world");
 ```json
 {"ts":"2026-07-18 14:25:16","level":"INFO","module":"my_app::main","caller":7,"msg":"hello,world"}
 ```
+
+### 本地时间输出
+
+默认使用 UTC 时间，通过 `with_local_time()` 可切换为本地时间（基于 `chrono::Local`），普通文本格式与 JSON 格式均生效：
+
+```rust
+Logger::new()
+    .with_json()
+    .with_local_time()
+    .with_time_format("%Y-%m-%d %H:%M:%S")
+    .init();
+
+info!("hello,world");
+```
+
+输出（以北京时间 UTC+8 为例）：
+
+```json
+{"ts":"2026-07-18 22:25:16","level":"INFO","module":"my_app::main","msg":"hello,world"}
+```
+
+> 使用本地时间时，建议将时间格式中的 `Z`（UTC 标识）去掉，例如 `%Y-%m-%dT%H:%M:%S` 或 `%Y-%m-%d %H:%M:%S`。
 
 ### 自定义 target
 
@@ -291,7 +315,7 @@ cargo clippy --all-targets
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `ts` | string | 日志时间，格式由 `with_time_format()` 决定。 |
+| `ts` | string | 日志时间，格式由 `with_time_format()` 决定；时区由 `with_local_time()` 决定（默认 UTC，开启后为本地时间）。 |
 | `level` | string | 日志级别：`ERROR` / `WARN` / `INFO` / `DEBUG` / `TRACE`。 |
 | `module` | string | 调用宏的 Rust 模块路径。 |
 | `target` | string | 可选，仅当通过 `target:` 自定义且与 `module` 不同时输出。 |

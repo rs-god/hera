@@ -194,6 +194,7 @@ assert_eq!(s, decrypted);
 - 可选 `caller_line` 模式：日志中携带模块路径与代码行号
 - 可选 `with_json()` 模式：输出 JSON 格式日志
 - 可选 `with_time_format()` 自定义时间格式，默认 `%Y-%m-%dT%H:%M:%SZ`
+- 可选 `with_local_time()` 本地时间输出（默认 UTC 时间），普通文本与 JSON 格式均生效
 - 自定义 `target:` 标签可自动输出到 JSON
 - 日志级别通过环境变量 `RUST_LOG` 控制，优先级：`error > warn > info > debug > trace`
 
@@ -223,6 +224,16 @@ info!(a = 1, b = "xxx"; "hello,world");
 ```rust
 Logger::new()
     .with_json()
+    .with_time_format("%Y-%m-%d %H:%M:%S")
+    .init();
+```
+
+本地时间输出（默认 UTC 时间）：
+
+```rust
+Logger::new()
+    .with_json()
+    .with_local_time()
     .with_time_format("%Y-%m-%d %H:%M:%S")
     .init();
 ```
