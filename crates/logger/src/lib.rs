@@ -1,4 +1,5 @@
 // 引入了chrono::Utc模块
+use chrono::Local;
 use chrono::Utc;
 use env_logger::Target;
 use std::io::Write;
@@ -7,9 +8,10 @@ use std::io::Write;
 pub use log::{debug, error, info, warn};
 
 pub struct Logger {
-    caller_line: bool,   // 是否输出行号
-    enable_json: bool,   // 是否以 JSON 格式输出
-    time_format: String, // 时间格式化格式
+    caller_line: bool,       // 是否输出行号
+    enable_json: bool,       // 是否以 JSON 格式输出
+    time_format: String,     // 时间格式化格式
+    enable_local_time: bool, // 是否使用本地时间，默认使用 UTC 时间
 }
 
 impl Logger {
@@ -18,6 +20,7 @@ impl Logger {
             caller_line: false,
             enable_json: false,
             time_format: "%Y-%m-%dT%H:%M:%SZ".to_string(),
+            enable_local_time: false,
         }
     }
 
@@ -51,6 +54,12 @@ impl Logger {
         self
     }
 
+    /// 开启本地时间输出，默认使用 UTC 时间。
+    pub fn with_local_time(mut self) -> Self {
+        self.enable_local_time = true;
+        self
+    }
+
     /// 日志初始化。
     ///
     /// 日志 level 优先级从高到低：error > warn > info > debug > trace。
@@ -61,7 +70,8 @@ impl Logger {
     /// - `with_caller_line()`：带行号的普通格式；
     /// - `with_json()`：JSON 格式（可再叠加 `with_caller_line()` 携带 caller 字段）。
     pub fn init(&self) {
-        self.try_init().expect("Logger::init should not be called after logger initialized");
+        self.try_init()
+            .expect("Logger::init should not be called after logger initialized");
     }
 
     /// 尝试初始化日志，返回错误而不是 panic。
@@ -70,22 +80,29 @@ impl Logger {
         builder.target(Target::Stdout);
 
         let time_format = self.time_format.clone();
+        let enable_local_time = self.enable_local_time;
 
         if self.enable_json {
             builder.format(move |buf, record| {
-                let json = format_json(record, &time_format);
+                let json = format_json(record, enable_local_time, &time_format);
                 writeln!(buf, "{}", json)
             });
         } else if self.caller_line {
             builder.format(move |buf, record| {
+                let ts = if enable_local_time {
+                    Local::now().format(&time_format)
+                } else {
+                    Utc::now().format(&time_format)
+                };
+
                 writeln!(
                     buf,
                     "[{} {} {}:{}] {}",
-                    Utc::now().format(&time_format), // 时间格式
-                    record.level(),                  // 日志级别
+                    ts,                                        // 时间
+                    record.level(),                            // 日志级别
                     record.module_path().unwrap_or("unnamed"), // 模块名
-                    record.line().unwrap_or(0),      // 行号
-                    record.args()                    // 日志 message body
+                    record.line().unwrap_or(0),                // 行号
+                    record.args()                              // 日志 message body
                 )
             });
         }
@@ -101,12 +118,17 @@ impl Default for Logger {
 }
 
 /// 将一条 `log::Record` 格式化为 JSON 字符串。
-fn format_json(record: &log::Record, time_format: &str) -> String {
+fn format_json(record: &log::Record, enable_local_time: bool, time_format: &str) -> String {
     let mut visitor = JsonVisitor::new();
     // 忽略 key_values 访问错误，保证日志始终能输出
     let _ = record.key_values().visit(&mut visitor);
 
-    let ts = Utc::now().format(time_format).to_string();
+    let ts = if enable_local_time {
+        Local::now().format(time_format).to_string()
+    } else {
+        Utc::now().format(time_format).to_string()
+    };
+
     let level = record.level();
     let module = record.module_path().unwrap_or("unnamed");
     let target = record.target();
@@ -311,11 +333,11 @@ mod tests {
             .build();
 
         // 默认 ISO 8601 格式
-        let json = format_json(&record, "%Y-%m-%dT%H:%M:%SZ");
+        let json = format_json(&record, true, "%Y-%m-%dT%H:%M:%SZ");
         assert!(json.contains("\"ts\":\"20") && json.contains("T") && json.contains("Z\""));
 
         // 自定义格式：%Y-%m-%d %H:%M:%S（带空格，无 T 无 Z）
-        let json = format_json(&record, "%Y-%m-%d %H:%M:%S");
+        let json = format_json(&record, true, "%Y-%m-%d %H:%M:%S");
         assert!(json.contains("\"ts\":\"20") && json.contains(" ") && !json.contains("T"));
     }
 }
